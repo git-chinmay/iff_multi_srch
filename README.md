@@ -5,12 +5,8 @@
 
 
 ## Directory Structure
-- `public/` : This directory contains your public assets, such as JavaScript `script.js` and CSS `style.css` files as they are your frontend assets.
+- `public/` : This directory contains your public assets, such as CSS for styling, favicon images and client side JavaScript code.
 
-- `views/` : This directory contains HTML templates for your web pages. You have the main page `index.html` and the login/signup page `login.html`.
-
-- `server.js` : This is the main server file. It handles routing, user authentication, and serves your static assets and HTML templates. This is server side asset.
-
-- `auth.js` : This file contains the client-side JavaScript code responsible for handling user authentication and managing the login/signup forms on the frontend.
+- `src/` : This folder contains the main server file. It handles routing, user authentication, and serves your static assets and HTML templates. This is server side asset. It also has some utility scripts.
 
 - `package.json` : This is your project's package configuration file, which lists dependencies and defines scripts for running your application.
