@@ -1,0 +1,16 @@
+{
+  "name": "iff-score-calculator",
+  "version": "1.0.0",
+  "description": "IFF Score Calculator",
+  "main": "server.js",
+  "scripts": {
+    "start": "node src/server.js"
+  },
+  "keywords": [],
+  "author": "Chinmay Nayak",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "socket.io": "^2.2.0"
+  }
+}
