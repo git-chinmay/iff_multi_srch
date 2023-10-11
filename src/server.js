@@ -64,10 +64,10 @@ io.on("connection", (socket)=>{
         // console.log(generateMessage("System", "Welcome!"))
         // socket.broadcast.to(user.room).emit("message", generateMessage("System",`${user.username} has joined the ${room} room.`));
         // console.log(generateMessage(generateMessage("System",`${user.username} has joined the ${room} room.`)))
-        // io.to(user.room).emit('roomData', {
-        //     room: user.room,
-        //     users: getUsersInRoom(user.room)
-        // })
+        io.to(user.room).emit('joinData', {
+            room: user.room,
+            users: getUsersInRoom(user.room)
+        })
         // callback(); //Indicating no issue while adding a new user
 
         // Listening the IFF_Score value from the joined user

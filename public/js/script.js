@@ -14,18 +14,6 @@ const iffScoreDisplay = document.getElementById("iffScore");
 const calculatesubmit = document.getElementById("calculate");
 const addButton = document.getElementById("addButton");
 
-// const sidebarTemplate = document.querySelector('#sidebar-template').innerHTML;
-
-// Client listening to Server's emit on 'roomData' tag
-// socket.on('roomData', ({room, users})=>{
-//     const html = Mustache.render(sidebarTemplate, {
-//         room,
-//         users
-//     })
-//     document.querySelector('#sidebar').innerHTML = html
-// })
-
-
 
 // It will parse the query string from join page so that (http://localhost:3000/main.html?username=Julia&room=room1)
 //Qs is coming from the main.html qs.min.js
@@ -41,13 +29,26 @@ socket.emit('join', {username, room}, (error)=>{
     }
 });
 
-socket.on('roomData', ({room, users, ticket, score})=>{
-    console.log("roomData RX ",room);
-    console.log("roomData RX ",users);
-    console.log("roomData RX ",ticket);
-    console.log("roomData RX ",score);
-    // totalScore = calTotalIFFScore(allUserDataList, room, tkt)
-})
+const sidebarTemplate = document.querySelector('#sidebar-template').innerHTML;
+// socket.on('roomData', ({room, users, ticket, score})=>{
+//     console.log("roomData RX ",room);
+//     console.log("roomData RX ",users);
+//     console.log("roomData RX ",ticket);
+//     console.log("roomData RX ",score);
+//     const html = Mustache.render(sidebarTemplate, {
+//         room,
+//         users
+//     })
+//     document.querySelector('#sidebar').innerHTML = html
+// })
+
+socket.on('joinData', ({room, users})=>{
+        const html = Mustache.render(sidebarTemplate, {
+            room,
+            users
+        })
+        document.querySelector('#sidebar').innerHTML = html
+    })
 
 
 // Variable initializations
@@ -125,42 +126,42 @@ calculatesubmit.addEventListener("click", () => {
 
 
 
-// ADD button functionality
-addButton.addEventListener("click", () => {
-    const rightContainer = document.querySelector(".right-container");
+// // ADD button functionality
+// addButton.addEventListener("click", () => {
+//     const rightContainer = document.querySelector(".right-container");
 
-    // Remove the existing scoresContainer if it exists
-    const existingScoresContainer = document.querySelector(".scores-container");
-    if (existingScoresContainer) {
-        rightContainer.removeChild(existingScoresContainer);
-    }
+//     // Remove the existing scoresContainer if it exists
+//     const existingScoresContainer = document.querySelector(".scores-container");
+//     if (existingScoresContainer) {
+//         rightContainer.removeChild(existingScoresContainer);
+//     }
 
-    // Create a new scoresContainer
-    const scoresContainer = document.createElement("div");
-    scoresContainer.classList.add("scores-container"); // Add a class for identification
+//     // Create a new scoresContainer
+//     const scoresContainer = document.createElement("div");
+//     scoresContainer.classList.add("scores-container"); // Add a class for identification
 
-    const uniqueScoresSet = new Set();
+//     const uniqueScoresSet = new Set();
 
-    // Remove duplicates from the score array
-    iffScoreArray.forEach((score) => uniqueScoresSet.add(score));
+//     // Remove duplicates from the score array
+//     iffScoreArray.forEach((score) => uniqueScoresSet.add(score));
 
-    // Convert the set back to an array and sort it in descending order
-    const uniqueScoresArray = Array.from(uniqueScoresSet).sort((a, b) => {
-        const valueA = parseInt(a.split(":")[1]);
-        const valueB = parseInt(b.split(":")[1]);
-        return valueB - valueA;
-    });
+//     // Convert the set back to an array and sort it in descending order
+//     const uniqueScoresArray = Array.from(uniqueScoresSet).sort((a, b) => {
+//         const valueA = parseInt(a.split(":")[1]);
+//         const valueB = parseInt(b.split(":")[1]);
+//         return valueB - valueA;
+//     });
 
-    // console.log("@@@@@", uniqueScoresArray);
-    uniqueScoresArray.forEach((score) => {
-        const scoreElement = document.createElement("p");
-        scoreElement.textContent = score;
-        scoresContainer.appendChild(scoreElement);
-    });
+//     // console.log("@@@@@", uniqueScoresArray);
+//     uniqueScoresArray.forEach((score) => {
+//         const scoreElement = document.createElement("p");
+//         scoreElement.textContent = score;
+//         scoresContainer.appendChild(scoreElement);
+//     });
 
-    // Append the new scoresContainer
-    rightContainer.appendChild(scoresContainer);
-});
+//     // Append the new scoresContainer
+//     rightContainer.appendChild(scoresContainer);
+// });
 
 // Display the slider input selection in real-time
 impactInput.addEventListener("input", updateValues);

@@ -19,9 +19,20 @@
         <div class="content-container">
             <div class="left-container">
                 <!-- Left container content -->
-                <h4>Room:</h4>
-                <h4>Users in Room</h4>
-                <p>This is the left container where you can display some other information.</p>
+                <div id="sidebar" class="display__sidebar">
+                    
+                </div>
+                <script id="sidebar-template" type="text/html">
+                    <h3 class="room-title">Room: {{room}}</h2>
+                    <h3 class="list-title">Users Joined</h3>
+                    <!--We have array of objects(users) and each object we want render username-->
+                    <ul class="users">
+                        {{#users}}
+                            <li>{{username}}</li>
+                        {{/users}}
+                    </ul>
+                </script>
+
             </div>
             <div class="center-container">
                 <!-- Center container content -->
