@@ -43,18 +43,6 @@ socket.on('joinData', ({room, users})=>{
     })
 
 
-// socket.on('roomData', ({room, users, ticket, score})=>{
-//     console.log("roomData RX ",room);
-//     console.log("roomData RX ",users);
-//     console.log("roomData RX ",ticket);
-//     console.log("roomData RX ",score);
-//     const ticketTeamScorePair = `${ticket} : ${score}`;
-//     TeamIffScoreArray.push(ticketTeamScorePair);
-
-// })
-
-
-
 
 // To calculate the IFF Score
 function calculateTicketIFFScore(impactValue, frequencyValue, frustrationValue) {
@@ -132,23 +120,20 @@ calculatesubmit.addEventListener("click", () => {
 
 
     socket.on('roomData', ({room, users, ticket, score})=>{
-        console.log("roomData RX ",room);
-        console.log("roomData RX ",users);
-        console.log("roomData RX ",ticket);
-        console.log("roomData RX ",score);
+
         const ticketTeamScorePair = `${ticket} : ${score}`;
         TeamIffScoreArray.push(ticketTeamScorePair);
 
-        // // DISPLAYING RESULT TO RIGHT CONTAINER
+
         // DISPLAYING RESULT TO RIGHT CONTAINER
         const rightContainer = document.querySelector(".right-container");
-        
+
         // Remove the existing scoresContainer if it exists
         const existingScoresContainer = document.querySelector(".scores-container");
         if (existingScoresContainer) {
             rightContainer.removeChild(existingScoresContainer);
         }
-    
+
         // Create a new scoresContainer
         const scoresContainer = document.createElement("div");
         scoresContainer.classList.add("scores-container"); // Add a class for identification
@@ -161,87 +146,23 @@ calculatesubmit.addEventListener("click", () => {
             const valueB = parseInt(b.split(":")[1]);
             return valueB - valueA;
         });
-    
+
         console.log("uniqueScoresArray: ",uniqueScoresArray);
-    
+
         // console.log("@@@@@", uniqueScoresArray);
         uniqueScoresArray.forEach((score) => {
             const scoreElement = document.createElement("p");
             scoreElement.textContent = score;
             scoresContainer.appendChild(scoreElement);
         });
-    
+
         // Append the new scoresContainer
         rightContainer.appendChild(scoresContainer);
-
-        
+  
     })
-
-    
-
 
 });
 
-
-
-// function getUniqueHighestScores(TeamIffScoreArray) {
-//     const teamScores = {};
-  
-//     // Iterate through the array and update the highest score for each team
-//     TeamIffScoreArray.forEach((score) => {
-//       const [team, iff] = score.split(':').map((str) => str.trim());
-//       let iffValue = parseInt(iff);
-  
-//       if (!(team in teamScores) || iffValue > teamScores[team]) {
-//         teamScores[team] = iffValue;
-//       }
-//     });
-  
-//     // Convert the object back to an array
-//     const uniqueHighestScores = Object.entries(teamScores).map(([team, iff]) => `${team}: ${iff}`);
-  
-//     return uniqueHighestScores;
-//   }
-  
-  
-
-
-// // ADD button functionality
-// addButton.addEventListener("click", () => {
-//     // DISPLAYING RESULT TO RIGHT CONTAINER
-//     const rightContainer = document.querySelector(".right-container");
-
-//     // Remove the existing scoresContainer if it exists
-//     const existingScoresContainer = document.querySelector(".scores-container");
-//     if (existingScoresContainer) {
-//         rightContainer.removeChild(existingScoresContainer);
-//     }
-
-//     // Create a new scoresContainer
-//     const scoresContainer = document.createElement("div");
-//     scoresContainer.classList.add("scores-container"); // Add a class for identification
-
-//     const UniqueTeamIffScoreArray = getUniqueHighestScores(TeamIffScoreArray)
-
-//     // Convert the set back to an array and sort it in descending order
-//     const uniqueScoresArray = Array.from(UniqueTeamIffScoreArray).sort((a, b) => {
-//         const valueA = parseInt(a.split(":")[1]);
-//         const valueB = parseInt(b.split(":")[1]);
-//         return valueB - valueA;
-//     });
-
-//     console.log("uniqueScoresArray: ",uniqueScoresArray);
-
-//     // console.log("@@@@@", uniqueScoresArray);
-//     uniqueScoresArray.forEach((score) => {
-//         const scoreElement = document.createElement("p");
-//         scoreElement.textContent = score;
-//         scoresContainer.appendChild(scoreElement);
-//     });
-
-//     // Append the new scoresContainer
-//     rightContainer.appendChild(scoresContainer);
-//});
 
 // Display the slider input selection in real-time
 impactInput.addEventListener("input", updateValues);

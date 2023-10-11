@@ -6,8 +6,6 @@ const {generateMessage} = require('./utils/messages')
 const {calTotalIFFScore} = require('./utils/utility')
 const {
     addUser,
-    removeUser,
-    getUser,
     getUsersInRoom
 } = require('./utils/users')
 
@@ -61,9 +59,7 @@ io.on("connection", (socket)=>{
 
         // Server will send welcome message to new user
         // socket.emit("message", generateMessage("System", "Welcome!"));
-        // console.log(generateMessage("System", "Welcome!"))
         // socket.broadcast.to(user.room).emit("message", generateMessage("System",`${user.username} has joined the ${room} room.`));
-        // console.log(generateMessage(generateMessage("System",`${user.username} has joined the ${room} room.`)))
         io.to(user.room).emit('joinData', {
             room: user.room,
             users: getUsersInRoom(user.room)
@@ -83,8 +79,8 @@ io.on("connection", (socket)=>{
             totalIFF = calTotalIFFScore(allUserDataList, user.room, ticket)
             console.log(totalIFF);
             io.to(user.room).emit('roomData', {
-                room: user.room,
-                users: getUsersInRoom(user.room),
+                // room: user.room,
+                // users: getUsersInRoom(user.room),
                 ticket: ticket,
                 score: totalIFF
             })
