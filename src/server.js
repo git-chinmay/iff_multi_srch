@@ -68,20 +68,21 @@ io.on("connection", (socket)=>{
 
         // Listening the IFF_Score value from the joined user
         socket.on('iff_scr',({ticket, iffscore}, callback) => {
+            const ticketUpperCase = ticket.toUpperCase();
             const allUserData = {};
             allUserData['id'] = user.id;
             allUserData['uname'] = user.username;
             allUserData['room'] = user.room;
-            allUserData['ticket'] = ticket;
+            allUserData['ticket'] = ticketUpperCase;
             allUserData['iffscr'] = Number(iffscore);
             allUserDataList.push(allUserData)
             console.log('allUserDataList', allUserDataList);
-            totalIFF = calTotalIFFScore(allUserDataList, user.room, ticket)
+            totalIFF = calTotalIFFScore(allUserDataList, user.room, ticketUpperCase)
             console.log(totalIFF);
             io.to(user.room).emit('roomData', {
                 // room: user.room,
                 // users: getUsersInRoom(user.room),
-                ticket: ticket,
+                ticket: ticketUpperCase,
                 score: totalIFF
             })
         });

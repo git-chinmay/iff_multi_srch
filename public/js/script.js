@@ -121,7 +121,7 @@ calculatesubmit.addEventListener("click", () => {
 
     socket.on('roomData', ({room, users, ticket, score})=>{
 
-        const ticketTeamScorePair = `${ticket} : ${score}`;
+        const ticketTeamScorePair = `${ticket} : ${score}`.toUpperCase();
         TeamIffScoreArray.push(ticketTeamScorePair);
 
 
