@@ -41,22 +41,22 @@
                 </div>
                 <div class="input-container">
                     <label for="impact">Impact:</label>
-                    <input type="range" id="impact" min="1" max="5" value="1" class="slider">
-                    <p>Min: 1 | Max: 5 | Selected: <span id="impactValue">1</span></p>
+                    <input type="range" id="impact" min="0" max="5" value="0" class="slider">
+                    <p>Min: 0 | Max: 5 | Selected: <span id="impactValue">0</span></p>
                 </div>
                 <div class="input-container">
                     <label for="frequency">Frequency:</label>
-                    <input type="range" id="frequency" min="1" max="5" value="1" class="slider">
-                    <p>Min: 1 | Max: 5 | Selected: <span id="frequencyValue">1</span></p>
+                    <input type="range" id="frequency" min="0" max="5" value="0" class="slider">
+                    <p>Min: 0 | Max: 5 | Selected: <span id="frequencyValue">0</span></p>
                 </div>
                 <div class="input-container">
                     <label for="frustration">Frustration:</label>
-                    <input type="range" id="frustration" min="1" max="5" value="1" class="slider">
+                    <input type="range" id="frustration" min="0" max="5" value="1" class="slider">
                     <p>Min: 1 | Max: 5 | Selected: <span id="frustrationValue">1</span></p>
                 </div>
                 <div class="input-container">
                     <label for="calculate">Calculate Score:</label>
-                    <input type="submit" id="calculate">
+                    <input type="submit" id="calculate" style="background-color: green; color: white;">
                     <p></p>
                 </div>
                 <div class="result">
@@ -66,9 +66,9 @@
             </div>
             <div class="right-container">
                 <!-- Right container content -->
-                <!-- <div class="add-container">
-                    <button id="addButton">ADD</button>
-                </div> -->
+                <div class="add-container">
+                    <button id="rstButton">RESET</button>
+                </div>
                 <h4>Prioratised Tickets</h4>
                 <div class="scores-container"></div>
             </div>

@@ -27,7 +27,7 @@ app.get('/socket.io/socket.io.js', (req, res) => {
 
 //Port configuration
 const port = process.env.PORT || 3000
-
+let allUserData = {};
 
 app.get("/", (req, res)=>{
     res.send("index")
@@ -39,7 +39,7 @@ server.listen(port, () => {
 
 
 
-const allUserDataList = [];
+let allUserDataList = [];
 io.on("connection", (socket)=>{
 
     //Receiving the username and room name of join page from client
@@ -69,7 +69,7 @@ io.on("connection", (socket)=>{
         // Listening the IFF_Score value from the joined user
         socket.on('iff_scr',({ticket, iffscore}, callback) => {
             const ticketUpperCase = ticket.toUpperCase();
-            const allUserData = {};
+            let allUserData = {};
             allUserData['id'] = user.id;
             allUserData['uname'] = user.username;
             allUserData['room'] = user.room;
@@ -87,6 +87,11 @@ io.on("connection", (socket)=>{
             })
         });
 
+        socket.on("reset", () => {
+            // Broadcast the "reset" event to all connected clients in the same room
+            io.to(user.room).emit("reset");
+            allUserDataList = [];
+        });
 
         callback(); //Indicating no issue while adding a new user
 

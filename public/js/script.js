@@ -1,5 +1,5 @@
-// // CLIENT SIDE CODE
-const socket = io()
+// CLIENT SIDE CODE
+const socket = io();
 
 const impactInput = document.getElementById("impact");
 const frequencyInput = document.getElementById("frequency");
@@ -11,37 +11,37 @@ const frequencyValueDisplay = document.getElementById("frequencyValue");
 const frustrationValueDisplay = document.getElementById("frustrationValue");
 const iffScoreDisplay = document.getElementById("iffScore");
 const calculatesubmit = document.getElementById("calculate");
-const addButton = document.getElementById("addButton");
+const addButton = document.getElementById("rstButton");
+
 
 // Store ticket scores in an array
 let iffScoreArray = [];
 let TeamIffScoreArray = [];
+let uniqueScoresArray = [];
 
 
-// It will parse the query string from join page so that (http://localhost:3000/main.html?username=Julia&room=room1)
-//Qs is coming from the main.html qs.min.js
-const {username, room} = Qs.parse(location.search, {ignoreQueryPrefix: true});
+// It will parse the query string from the join page so that (http://localhost:3000/main.html?username=Julia&room=room1)
+// Qs is coming from the main.html qs.min.js
+const { username, room } = Qs.parse(location.search, { ignoreQueryPrefix: true });
 
-
-// Sending the usrname and room details to server(extracted from join page)
-socket.emit('join', {username, room}, (error)=>{
-    if(error){
+// Sending the username and room details to the server (extracted from the join page)
+socket.emit("join", { username, room }, (error) => {
+    if (error) {
         alert(error);
-        //Redirect the user to home page in case of error
-        location.href = '/' //Redirecting to JOIN page
+        // Redirect the user to the home page in case of error
+        location.href = "/"; // Redirecting to JOIN page
     }
 });
 
 
-const sidebarTemplate = document.querySelector('#sidebar-template').innerHTML;
-socket.on('joinData', ({room, users})=>{
-        const html = Mustache.render(sidebarTemplate, {
-            room,
-            users
-        })
-        document.querySelector('#sidebar').innerHTML = html
-    })
-
+const sidebarTemplate = document.querySelector("#sidebar-template").innerHTML;
+socket.on("joinData", ({ room, users }) => {
+    const html = Mustache.render(sidebarTemplate, {
+        room,
+        users,
+    });
+    document.querySelector("#sidebar").innerHTML = html;
+});
 
 
 // To calculate the IFF Score
@@ -66,6 +66,7 @@ function updateValues() {
     frustrationValueDisplay.textContent = frustrationValue;
 }
 
+
 // To update ticket IFF score
 function updateTicketIFFScore(iffScore) {
     const ticketNumber = ticketNumberInput.value;
@@ -76,24 +77,25 @@ function updateTicketIFFScore(iffScore) {
 }
 
 
+// To get the unique score from the Team score array
 function getUniqueHighestScores(TeamIffScoreArray) {
     const teamScores = {};
-  
+
     // Iterate through the array and update the highest score for each team
     TeamIffScoreArray.forEach((score) => {
-      const [team, iff] = score.split(':').map((str) => str.trim());
-      let iffValue = parseInt(iff);
-  
-      if (!(team in teamScores) || iffValue > teamScores[team]) {
-        teamScores[team] = iffValue;
-      }
+        const [team, iff] = score.split(":").map((str) => str.trim());
+        let iffValue = parseInt(iff);
+
+        if (!(team in teamScores) || iffValue > teamScores[team]) {
+            teamScores[team] = iffValue;
+        }
     });
-  
+
     // Convert the object back to an array
     const uniqueHighestScores = Object.entries(teamScores).map(([team, iff]) => `${team}: ${iff}`);
-  
+
     return uniqueHighestScores;
-  }
+}
 
 
 // Event listener for the Calculate button
@@ -108,22 +110,19 @@ calculatesubmit.addEventListener("click", () => {
     updateTicketIFFScore(iffScore);
     console.log(iffScoreArray);
 
-    const [ticket, iffscore] =iffScoreArray[iffScoreArray.length-1].split(':').map(item => item.trim());
-    // Sending the iff score and ticket number to server
-    socket.emit('iff_scr', {ticket, iffscore}, (error)=>{
-        if(error){
+    const [ticket, iffscore] = iffScoreArray[iffScoreArray.length - 1].split(":").map((item) => item.trim());
+    // Sending the iff score and ticket number to the server
+    socket.emit("iff_scr", { ticket, iffscore }, (error) => {
+        if (error) {
             alert(error);
-            //Redirect the user to home page in case of error
-            location.href = '/' //Redirecting to JOIN page
+            // Redirect the user to the home page in case of error
+            location.href = "/"; // Redirecting to JOIN page
         }
     });
 
-
-    socket.on('roomData', ({ticket, score})=>{
-
+    socket.on("roomData", ({ ticket, score }) => {
         const ticketTeamScorePair = `${ticket} : ${score}`.toUpperCase();
         TeamIffScoreArray.push(ticketTeamScorePair);
-
 
         // DISPLAYING RESULT TO RIGHT CONTAINER
         const rightContainer = document.querySelector(".right-container");
@@ -137,19 +136,18 @@ calculatesubmit.addEventListener("click", () => {
         // Create a new scoresContainer
         const scoresContainer = document.createElement("div");
         scoresContainer.classList.add("scores-container"); // Add a class for identification
-        console.log('TeamIffScoreArray', TeamIffScoreArray);
-        const UniqueTeamIffScoreArray = getUniqueHighestScores(TeamIffScoreArray)
-        console.log('UniqueTeamIffScoreArray', UniqueTeamIffScoreArray)
+        console.log("TeamIffScoreArray", TeamIffScoreArray);
+        const UniqueTeamIffScoreArray = getUniqueHighestScores(TeamIffScoreArray);
+        console.log("UniqueTeamIffScoreArray", UniqueTeamIffScoreArray);
         // Convert the set back to an array and sort it in descending order
-        const uniqueScoresArray = Array.from(UniqueTeamIffScoreArray).sort((a, b) => {
+        uniqueScoresArray = Array.from(UniqueTeamIffScoreArray).sort((a, b) => {
             const valueA = parseInt(a.split(":")[1]);
             const valueB = parseInt(b.split(":")[1]);
             return valueB - valueA;
         });
 
-        console.log("uniqueScoresArray: ",uniqueScoresArray);
+        console.log("uniqueScoresArray: ", uniqueScoresArray);
 
-        // console.log("@@@@@", uniqueScoresArray);
         uniqueScoresArray.forEach((score) => {
             const scoreElement = document.createElement("p");
             scoreElement.textContent = score;
@@ -158,10 +156,73 @@ calculatesubmit.addEventListener("click", () => {
 
         // Append the new scoresContainer
         rightContainer.appendChild(scoresContainer);
-  
-    })
+    });
+
+    rstButton.addEventListener("click", () => {
+        console.log("RESET button clicked!");
+
+        // Reset the input values to zero
+        impactInput.value = 0;
+        frequencyInput.value = 0;
+        frustrationInput.value = 0;
+
+        // Reset the displayed values to zero
+        impactValueDisplay.textContent = "0";
+        frequencyValueDisplay.textContent = "0";
+        frustrationValueDisplay.textContent = "0";
+        iffScoreDisplay.textContent = "0";
+
+        // Clear the ticket number result
+        ticketNumberResult.textContent = "";
+
+        // Clear the iffScoreArray
+        iffScoreArray = [];
+
+        // Emit a "reset" event to the server
+        socket.emit("reset");
+
+        // Reset the uniqueScoresArray
+        uniqueScoresArray = [];
+    });
+    
+});
+
+
+
+// Listen for the "reset" event from the server
+socket.on("reset", () => {
+    console.log("reset received in client side.")
+    // Reset the input values to one
+    impactInput.value = 0;
+    frequencyInput.value = 0;
+    frustrationInput.value = 0;
+
+    // Reset the displayed values to zero
+    impactValueDisplay.textContent = "0";
+    frequencyValueDisplay.textContent = "0";
+    frustrationValueDisplay.textContent = "0";
+    iffScoreDisplay.textContent = "0";
+
+    // Clear the ticket number result
+    ticketNumberResult.textContent = "";
+
+    // Clear the iffScoreArray
+    iffScoreArray = [];
+
+    // Clear the right container
+    const existingScoresContainer = document.querySelector(".scores-container");
+    if (existingScoresContainer) {
+        existingScoresContainer.parentNode.removeChild(existingScoresContainer);
+    }
+
+    // Clear the TeamIffScoreArray
+    TeamIffScoreArray = [];
+
+    // Reset the uniqueScoresArray
+    uniqueScoresArray = [];
 
 });
+
 
 
 // Display the slider input selection in real-time
